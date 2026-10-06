@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparação Financeira: Carro Zero vs. Carro Usado + Investimentos (10 Anos)</title>
+    <style>
+        :root {
+            --primary: #1e293b;
+            --secondary: #3b82f6;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #334155;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: var(--primary);
+            text-align: center;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f8fafc;
+        }
+        .highlight-good {
+            color: var(--accent);
+            font-weight: bold;
+        }
+        .highlight-bad {
+            color: var(--danger);
+            font-weight: bold;
+        }
+        .summary-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .metric-card {
+            background: #f1f5f9;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .metric-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 1rem;
+            color: #64748b;
+        }
+        .metric-card p {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .chart-container {
+            margin-top: 20px;
+        }
+        .bar-group {
+            margin-bottom: 12px;
+        }
+        .bar-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .bar-track {
+            background: #e2e8f0;
+            border-radius: 6px;
+            height: 24px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            text-align: right;
+            padding-right: 8px;
+            color: white;
+            font-size: 0.85rem;
+            line-height: 24px;
+            font-weight: bold;
+            transition: width 1s ease-in-out;
+        }
+        .fill-zero { background-color: var(--danger); }
+        .fill-invest { background-color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Simulação Financeira de 10 Anos</h1>
+    <p style="text-align: center; color: #64748b;">Comparação de Patrimônio: Rota A (Carro Zero de R$ 220k) vs. Rota B (Carro Usado + Investimento)</p>
+
+    <!-- Resumo dos Resultados Finais -->
+    <div class="card">
+        <h2>Resultado Final no Ano 10</h2>
+        <div class="summary-box">
+            <div class="metric-card">
+                <h3>Rota A (Carro Zero)</h3>
+                <p class="highlight-bad">R$ 65.000</p>
+                <small>Apenas o valor residual do veículo</small>
+            </div>
+            <div class="metric-card">
+                <h3>Rota B (Usado + Investimento)</h3>
+                <p class="highlight-good">R$ 585.000</p>
+                <small>Carro (R$ 30k) + Carteira (R$ 555k)</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico Visual de Barras Comparativo -->
+    <div class="card">
+        <h2>Comparativo Visual de Patrimônio Final</h2>
+        <div class="chart-container">
+            <div class="bar-group">
+                <div class="bar-label">Rota A: Carro Zero de R$ 220.000</div>
+                <div class="bar-track">
+                    <div class="bar-fill fill-zero" style="width: 11%;">R$ 65k</div>
+                </div>
+            </div>
+            <div class="bar-group">
+                <div class="bar-label">Rota B: Usado (R$ 35k) + Investimento dos R$ 185k restantes + Aportes</div>
+                <div class="bar-track">
+                    <div class="bar-fill fill-invest" style="width: 100%;">R$ 585k</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela Ano a Ano -->
+    <div class="card">
+        <h2>Linha do Tempo Detalhada (Ano a Ano)</h2>
