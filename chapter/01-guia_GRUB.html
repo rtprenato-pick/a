@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Resgate do GRUB - Emergência Linux</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-color: #c9d1d9;
+            --accent-green: #2ea043;
+            --accent-blue: #58a6ff;
+            --accent-orange: #d29922;
+            --code-bg: #010409;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--accent-blue);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #8b949e;
+            font-size: 0.95rem;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            display: inline-block;
+            background-color: var(--accent-blue);
+            color: #000;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+        }
+
+        h2 {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0;
+            font-size: 1.25rem;
+            color: #fff;
+        }
+
+        p {
+            margin: 10px 0;
+            color: #8b949e;
+        }
+
+        .explanation {
+            background-color: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid var(--accent-blue);
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .tip {
+            background-color: rgba(210, 153, 34, 0.1);
+            border-left: 4px solid var(--accent-orange);
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 15px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            color: #7ee787;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--accent-orange);
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: #8b949e;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🛠️ Guia de Resgate do GRUB</h1>
+        <div class="subtitle">Como carregar o Linux manualmente no terminal <code>grub&gt;</code></div>
+    </header>
+
+    <!-- PASSO 1 -->
+    <div class="step-card">
+        <div>
+            <span class="step-number">1</span>
+            <h2>Encontrar a partição do Linux</h2>
+        </div>
+        <p>Liste todas as partições reconhecidas e verifique o conteúdo de cada uma até achar a que contém a pasta <code>/boot</code>.</p>
+        
+        <pre><code>grub> ls
+grub> ls (hd0,gpt1)/
+grub> ls (hd0,gpt2)/</code></pre>
+
+        <div class="explanation">
+            <strong>O que faz:</strong> O <code>ls</code> usa os drivers internos do GRUB para ler as pastas da partição. Você achou a partição certa quando ver pastas como <code>boot/</code>, <code>etc/</code>, <code>usr/</code> ou arquivos do sistema.
+        </div>
+    </div>
+
+    <!-- PASSO 2 -->
+    <div class="step-card">
+        <div>
+            <span class="step-number">2</span>
+            <h2>Definir a partição de trabalho</h2>
+        </div>
+        <p>Aponte o GRUB para a partição que você localizou no Passo 1 (exemplo usando <code>hd0,gpt2</code>):</p>
+        
+        <pre><code>grub> set root=(hd0,gpt2)</code></pre>
+
+        <div class="explanation">
+            <strong>O que faz:</strong> Não lê nada no disco ainda! Apenas define a partição de referência. A partir de agora, digitar a barra <code>/</code> significa acessar a raiz de <code>(hd0,gpt2)</code>.
+        </div>
+
+        <div class="tip">
+            <strong>Teste de Confirmação:</strong> Digite <code>ls /</code>. O resultado DEVE ser idêntico ao comando <code>ls (hd0,gpt2)/</code> do passo anterior.
+        </div>
+    </div>
+
+    <!-- PASSO 3 -->
+    <div class="step-card">
+        <div>
+            <span class="step-number">3</span>
+            <h2>Carregar o Kernel do Linux</h2>
+        </div>
+        <p>Carregue o motor principal do sistema e diga a ele qual partição deve ser montada como sistema principal:</p>
+        
+        <pre><code>grub> linux /boot/vmlinuz-xxx root=/dev/sda2</code></pre>
+
+        <div class="explanation">
+            <strong>O que faz:</strong> 
+            <ul>
+                <li><code>linux /boot/vmlinuz-...</code>: Copia o arquivo do Kernel do disco para a memória RAM.</li>
+                <li><code>root=/dev/sda2</code>: Passa como instrução para o Kernel onde ele deve buscar o restante do sistema ao inicializar (substitua pelo nome da sua partição no Linux, ex: <code>sda2</code> ou <code>nvme0n1p2</code>).</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            💡 <strong>Dica da tecla TAB:</strong> Digite <code>linux /boot/vmlinuz-</code> e aperte <kbd>TAB</kbd>. O GRUB vai preencher automaticamente o nome da versão do seu Kernel!
+        </div>
+    </div>
+
+    <!-- PASSO 4 -->
+    <div class="step-card">
+        <div>
+            <span class="step-number">4</span>
+            <h2>Carregar os drivers iniciais (initramfs)</h2>
+        </div>
+        <p>Carregue a imagem da memória RAM inicial que contém os drivers básicos do sistema:</p>
+        
+        <pre><code>grub> initrd /boot/initrd.img-xxx</code></pre>
+
+        <div class="explanation">
+            <strong>O que faz:</strong> Coloca na memória RAM os módulos e drivers necessários para que o Kernel consiga se comunicar com os discos e montar o sistema de arquivos final.
+        </div>
+
+        <div class="tip">
+            💡 <strong>Dica da tecla TAB:</strong> Digite <code>initrd /boot/init</code> e aperte <kbd>TAB</kbd> para o GRUB autocompletar o nome do arquivo da mesma versão do Kernel.
+        </div>
+    </div>
+
+    <!-- PASSO 5 -->
+    <div class="step-card">
+        <div>
+            <span class="step-number">5</span>
+            <h2>Dar a partida e passar o controle</h2>
+        </div>
+        <p>Com o Kernel e o Initrd carregados na RAM, ordene a inicialização:</p>
+        
+        <pre><code>grub> boot</code></pre>
+
+        <div class="explanation">
+            <strong>O que faz:</strong> Dá a partida no processador para executar o Kernel na memória RAM. O GRUB se encerra e a tela do Linux começará a carregar.
+        </div>
+    </div>
+
+    <!-- PASSO EXTRA -->
+    <div class="step-card" style="border-color: var(--accent-green);">
+        <div>
+            <span class="step-number" style="background-color: var(--accent-green);">6</span>
+            <h2>Após entrar no Linux (Reparar o GRUB)</h2>
+        </div>
+        <p>Assim que o sistema iniciar, abra o terminal e repare a instalação para não ter que fazer tudo manualmente de novo:</p>
+        
+        <pre><code>sudo grub-install /dev/sda
+sudo update-grub</code></pre>
+    </div>
+
+    <footer>
+        Guia Rápido de Emergência do GRUB • Salve este arquivo localmente para acesso offline.
+    </footer>
+</div>
+
+</body>
+</html>
