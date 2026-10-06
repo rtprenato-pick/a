@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice de Capítulos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            display: block;
+            padding: 12px 16px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #0366d6;
+            font-weight: bold;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        a:hover {
+            background: #f1f8ff;
+            border-color: #c8e1ff;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Capítulos Disponíveis</h1>
+    <ul id="menu-list">
+        <li class="loading">Carregando capítulos...</li>
+    </ul>
+
+    <script>
+        async function carregarCapitulos() {
+            // Substitua 'rtprenato-pick' e 'a' pelo seu usuário/organização e repositório no GitHub
+            const owner = 'rtprenato-pick';
+            const repo = 'a';
+            const path = 'chapter';
+            
+            const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            const listaElement = document.getElementById('menu-list');
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erro ao buscar os arquivos da pasta.');
+
+                const arquivos = await response.json();
+                
+                // Filtra apenas arquivos com extensão .html (ignorando o próprio index se houver)
+                const htmlFiles = arquivos.filter(file => file.type === 'file' && file.name.endsWith('.html'));
+
+                listaElement.innerHTML = ''; // Limpa o "Carregando..."
+
+                if (htmlFiles.length === 0) {
+                    listaElement.innerHTML = '<li>Nenhum capítulo encontrado.</li>';
+                    return;
+                }
+
+                htmlFiles.forEach(file => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    
+                    // Link relativo para a pasta chapter/
+                    a.href = `chapter/${file.name}`;
+                    
+                    // Formata o nome do link (remove a extensão e substitui hífens por espaços, se quiser)
+                    let nomeFormatado = file.name.replace('.html', '');
+                    
+                    a.textContent = nomeFormatado;
+                    
+                    li.appendChild(a);
+                    listaElement.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error(error);
+                listaElement.innerHTML = '<li style="color: red;">Erro ao carregar a lista de capítulos.</li>';
+            }
+        }
+
+        carregarCapitulos();
+    </script>
+
+</body>
+</html>
